@@ -2,6 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+// eslint-disable-next-line import/extensions
+import AuthRoute from './Routes/AuthRoute.js';
+
+//Routes
+//Middleware
 
 dotenv.config({ path: './config.env' });
 
@@ -20,3 +25,6 @@ mongoose
     )
   )
   .catch((error) => console.log(error));
+
+//useage of route
+app.use('/api/v1/auth', AuthRoute);
