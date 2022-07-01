@@ -1,9 +1,10 @@
 import express from 'express';
+// eslint-disable-next-line import/extensions
+import { loginUser, registerUser } from '../Controllers/AuthController.js';
 
 const router = express.Router();
 
-router.get('/get', async (req, res) => {
-  res.send('Auth Route');
-});
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 export default router;
