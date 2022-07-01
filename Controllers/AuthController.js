@@ -1,10 +1,9 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/prefer-default-export */
+
 import bcrypt from 'bcrypt';
 import UserModel from '../Models/userModel.js';
 //Registering a new User
 
-// eslint-disable-next-line prettier/prettier
+
 export const registerUser = async (req, res) => {
   const { userName, password, firstName, lastName } = req.body;
 
@@ -32,7 +31,7 @@ export const loginUser = async (req, res) => {
     if (user) {
       const validity = await bcrypt.compare(password, user.password);
 
-      // eslint-disable-next-line no-unused-expressions
+     
       validity
         ? res.status(200).json(user)
         : res.status(401).json('Wrong Password');

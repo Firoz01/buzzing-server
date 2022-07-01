@@ -1,9 +1,9 @@
-/* eslint-disable import/extensions */
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-// eslint-disable-next-line import/extensions
+
 import AuthRoute from './Routes/AuthRoute.js';
 import UserRoute from './Routes/UserRoute.js';
 
