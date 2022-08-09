@@ -7,7 +7,7 @@ export const createPost = async (req, res) => {
 
   try {
     await newPost.save();
-    res.status(200).json('Your post has been create successfully!');
+    res.status(200).json(newPost);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -93,14 +93,17 @@ export const getTimelinePosts = async (req, res) => {
       {
         $project: {
           followingPosts: 1,
-          _id:0
+          _id: 0
         }
       }
     ]);
-    res.status(200).json(currentUserPosts.concat(...followingPosts[0].followingPosts)
-      .sort((a, b) => {
-      return b.createdAt - a.createdAt
-    }));
+    res.status(200).json(
+      currentUserPosts
+        .concat(...followingPosts[0].followingPosts)
+        .sort((a, b) => {
+          return b.createdAt - a.createdAt;
+        })
+    );
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
