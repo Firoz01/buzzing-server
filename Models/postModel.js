@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
 const postSchema = mongoose.Schema(
   {
-    userId: { type: String },
+    userId: { type: String, required: true },
     desc: String,
     likes: [],
-    image: String
+    image: String,
+    cloudinaryImgId: String
   },
   {
     timestamps: true

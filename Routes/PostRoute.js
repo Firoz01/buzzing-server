@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/', upload.single('image'), createPost);
 router.get('/:id', getPost);
-router.put('/:id', updatePost);
+router.put('/:id', upload.single('image'), updatePost);
 router.delete('/:id', deletePost);
 router.put('/:id/like', likeUnlikePost);
 router.get('/:id/timeline', getTimelinePosts);

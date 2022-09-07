@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import PostModel from '../Models/postModel.js';
 import UserModel from '../Models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
+import cloudinary from '../utils/cloudinary.js';
 import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
 
 export const createPost = catchAsync(async (req, res) => {
@@ -11,45 +12,66 @@ export const createPost = catchAsync(async (req, res) => {
     });
 
     const post = {
-      userId: `${req.body.userId}`,
-      desc: `${req.body.desc}`,
-      image: `${result.secure_url}`
+      userId: req.body.userId,
+      desc: req.body.desc,
+      image: result.secure_url,
+      cloudinaryImgId: result.public_id
     };
 
-
-
-    let newPost = new PostModel(post);
-
-    const doc = await newPost.save();
-    console.log(doc);
+    const newPost = new PostModel(post);
+    await newPost.save();
 
     res.status(200).json('post sucessfully save which contain with image');
   } else {
     const newPost = new PostModel(req.body);
-    console.log(newPost);
     await newPost.save();
-
-    res.status(200).json('post save to db which not contain any image');
+    res.status(200).json('post save to db which is not contain any image');
   }
 });
 
-export const getPost = async (req, res) => {
+export const getPost = catchAsync(async (req, res) => {
   const id = req.params.id;
-  try {
-    const doc = await PostModel.findById(id);
-    res.status(200).json(doc);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  const doc = await PostModel.findById(id);
+  res.status(200).json(doc);
+});
+
 export const updatePost = async (req, res) => {
   const postId = req.params.id;
   const { userId } = req.body;
   try {
     const post = await PostModel.findById(postId);
-    if (post.userId === userId) {
-      await post.updateOne({ $set: req.body });
-      res.status(200).json('post updated successfully! Wow');
+    if (post.userId == userId) {
+      if (req?.file?.path) {
+        const cloudinaryDeleteResult = await cloudinary.uploader.destroy(
+          post.cloudinaryImgId
+        );
+        const imageUpdated = await uploadSingleImageToCloudinary(
+          req.file.path,
+          {
+            folder: 'postImage'
+          }
+        );
+
+        const updatedPost = {
+          userId: req.body.userId,
+          desc: req.body.desc,
+          image: imageUpdated.secure_url,
+          cloudinaryImgId: imageUpdated.public_id
+        };
+
+        const updateToDb = await post.updateOne({ $set: updatedPost });
+        res.status(200).json({
+          message: 'post updated successfully which is contain image! Wow',
+          imageDeletedResult: cloudinaryDeleteResult,
+          imageUpdatedResult: imageUpdated,
+          databaseUpdateResult: updateToDb
+        });
+      } else {
+        await post.updateOne({ $set: req.body });
+        res
+          .status(200)
+          .json('post updated successfully which does not contain image! Wow');
+      }
     } else {
       res.status(401).json("You can't update in this post");
     }
@@ -63,7 +85,11 @@ export const deletePost = async (req, res) => {
   const { userId } = req.body;
   try {
     const post = await PostModel.findById(postId);
+
     if (post.userId === userId) {
+      if (post?.cloudinaryImgId) {
+        await cloudinary.uploader.destroy(post.cloudinaryImgId);
+      }
       await post.deleteOne();
       res.status(200).json('post delete successfully');
     } else {
