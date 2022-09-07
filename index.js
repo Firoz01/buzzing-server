@@ -12,16 +12,16 @@ import UploadRoute from './Routes/UploadRoute.js';
 //Routes
 //Middleware
 
-dotenv.config({ path: './config.env' });
+dotenv.config();
 
 const app = express();
 
 // to serve images for public user
 
-app.use(express.static('public'))
-app.use('/images', express.static("images"))
+app.use(express.static('public'));
+app.use('/images', express.static('images'));
 
-
+app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json({ limit: '30mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }));

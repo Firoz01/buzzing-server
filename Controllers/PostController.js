@@ -1,18 +1,37 @@
 import mongoose from 'mongoose';
 import PostModel from '../Models/postModel.js';
 import UserModel from '../Models/userModel.js';
+import catchAsync from '../utils/catchAsync.js';
+import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
 
-export const createPost = async (req, res) => {
-  const newPost = new PostModel(req.body);
+export const createPost = catchAsync(async (req, res) => {
+  if (req?.file?.path) {
+    const result = await uploadSingleImageToCloudinary(req.file.path, {
+      folder: 'postImage'
+    });
 
-  try {
-    console.log(newPost)
+    const post = {
+      userId: `${req.body.userId}`,
+      desc: `${req.body.desc}`,
+      image: `${result.secure_url}`
+    };
+
+
+
+    let newPost = new PostModel(post);
+
+    const doc = await newPost.save();
+    console.log(doc);
+
+    res.status(200).json('post sucessfully save which contain with image');
+  } else {
+    const newPost = new PostModel(req.body);
+    console.log(newPost);
     await newPost.save();
-    res.status(200).json(newPost);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+
+    res.status(200).json('post save to db which not contain any image');
   }
-};
+});
 
 export const getPost = async (req, res) => {
   const id = req.params.id;

@@ -7,9 +7,10 @@ import {
   likeUnlikePost,
   updatePost
 } from '../Controllers/PostController.js';
+import upload from '../utils/multer.js';
 const router = express.Router();
 
-router.post('/', createPost);
+router.post('/', upload.single('image'), createPost);
 router.get('/:id', getPost);
 router.put('/:id', updatePost);
 router.delete('/:id', deletePost);
