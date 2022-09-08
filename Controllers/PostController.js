@@ -6,6 +6,10 @@ import cloudinary from '../utils/cloudinary.js';
 import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
 
 export const createPost = catchAsync(async (req, res) => {
+  //console.log(req?.file);
+  //console.log(req.body);
+  //res.status(200).json('okay');
+
   if (req?.file?.path) {
     const result = await uploadSingleImageToCloudinary(req.file.path, {
       folder: 'postImage'
@@ -20,12 +24,11 @@ export const createPost = catchAsync(async (req, res) => {
 
     const newPost = new PostModel(post);
     await newPost.save();
-
-    res.status(200).json('post sucessfully save which contain with image');
+    res.status(200).json(newPost);
   } else {
     const newPost = new PostModel(req.body);
     await newPost.save();
-    res.status(200).json('post save to db which is not contain any image');
+    res.status(200).json(newPost);
   }
 });
 
