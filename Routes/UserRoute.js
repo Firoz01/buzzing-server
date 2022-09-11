@@ -1,4 +1,3 @@
-
 import express from 'express';
 import {
   deleteUser,
@@ -9,10 +8,16 @@ import {
   updateUser
 } from '../Controllers/UserControlller.js';
 
+import upload from '../utils/multer.js';
+
 const router = express.Router();
 router.get('/', getAlluser);
 router.get('/:id', getUser);
-router.put('/:id', updateUser);
+router.put(
+  '/:id',
+  upload.any(),
+  updateUser
+);
 router.delete('/:id', deleteUser);
 router.put('/:id/follow', following);
 router.put('/:id/unfollow', unFollowing);

@@ -1,6 +1,5 @@
-import bcrypt from 'bcrypt';
-
 import UserModel from '../Models/userModel.js';
+import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
 
 export const getAlluser = async (req, res) => {
   try {
@@ -32,18 +31,59 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const id = req.params.id;
-  const { currentUserId, currenUserAdminStatus, password } = req.body;
+  const { _id } = req.body;
 
-  if (id === currentUserId || currenUserAdminStatus) {
+  if (id === _id) {
     try {
-      if (password) {
-        const salt = await bcrypt.genSalt(10);
-        req.body.password = await bcrypt.hash(password, salt);
+      let profileImageUpdated;
+      let coverImageUpdated;
+
+      if (req?.files) {
+        if (req?.files[0].fieldname === 'profileImage') {
+          profileImageUpdated = await uploadSingleImageToCloudinary(
+            req.files[0].path,
+            {
+              folder: 'profileImage'
+            }
+          );
+        }
+        if (req?.files[0].fieldname === 'coverImage') {
+          coverImageUpdated = await uploadSingleImageToCloudinary(
+            req.files[0].path,
+            {
+              folder: 'coverImage'
+            }
+          );
+        }
+        if (req?.files[1].fieldname === 'coverImage') {
+          coverImageUpdated = await uploadSingleImageToCloudinary(
+            req.files[1].path,
+            {
+              folder: 'coverImage'
+            }
+          );
+        }
       }
-      const user = await UserModel.findByIdAndUpdate(id, req.body, {
-        new: true
+
+      const updatedata = {
+        _id: _id,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        worksAt: req.body.worksAt,
+        livesIn: req.body.livesIn,
+        relationship: req.body.relationship,
+        cloudinaryImgIdProfile: profileImageUpdated.public_id,
+        profilePicture: profileImageUpdated.secure_url,
+        cloudinaryImgIdCover: coverImageUpdated.public_id,
+        coverPicture: coverImageUpdated.secure_url
+      };
+
+      const user = await UserModel.findById(id);
+      const userUpdateToDb = await user.updateOne({ $set: updatedata });
+      res.status(200).json({
+        message: 'user update successfully',
+        databaseUpdateResult: userUpdateToDb
       });
-      res.status(200).json(user);
     } catch (error) {
       res.status(500).json({ message: error.message });
     }

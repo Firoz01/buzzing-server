@@ -23,7 +23,9 @@ const userSchema = mongoose.Schema(
       default: false
     },
     profilePicture: String,
+    cloudinaryImgIdProfile: String,
     coverPicture: String,
+    cloudinaryImgIdCover: String,
     about: String,
     livesIn: String,
     worksAt: String,
