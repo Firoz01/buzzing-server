@@ -40,25 +40,25 @@ export const updateUser = async (req, res) => {
       let coverImageUpdated;
 
       if (req?.files) {
-        if (req?.files[0].fieldname === 'profileImage') {
+        if (req?.files[0]?.fieldname === 'profileImage') {
           profileImageUpdated = await uploadSingleImageToCloudinary(
-            req.files[0].path,
+            req?.files[0]?.path,
             {
               folder: 'profileImage'
             }
           );
         }
-        if (req?.files[0].fieldname === 'coverImage') {
+        if (req?.files[0]?.fieldname === 'coverImage') {
           coverImageUpdated = await uploadSingleImageToCloudinary(
-            req.files[0].path,
+            req.files[0]?.path,
             {
               folder: 'coverImage'
             }
           );
         }
-        if (req?.files[1].fieldname === 'coverImage') {
+        if (req?.files[1]?.fieldname === 'coverImage') {
           coverImageUpdated = await uploadSingleImageToCloudinary(
-            req.files[1].path,
+            req.files[1]?.path,
             {
               folder: 'coverImage'
             }
@@ -68,15 +68,15 @@ export const updateUser = async (req, res) => {
 
       const updatedata = {
         _id: _id,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        worksAt: req.body.worksAt,
-        livesIn: req.body.livesIn,
-        relationship: req.body.relationship,
-        cloudinaryImgIdProfile: profileImageUpdated.public_id,
-        profilePicture: profileImageUpdated.secure_url,
-        cloudinaryImgIdCover: coverImageUpdated.public_id,
-        coverPicture: coverImageUpdated.secure_url
+        firstName: req.body?.firstName,
+        lastName: req.body?.lastName,
+        worksAt: req.body?.worksAt,
+        livesIn: req.body?.livesIn,
+        relationship: req.body?.relationship,
+        cloudinaryImgIdProfile: profileImageUpdated?.public_id,
+        profilePicture: profileImageUpdated?.secure_url,
+        cloudinaryImgIdCover: coverImageUpdated?.public_id,
+        coverPicture: coverImageUpdated?.secure_url
       };
 
       const user = await UserModel.findById(id);

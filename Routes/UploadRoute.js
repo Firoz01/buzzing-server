@@ -18,7 +18,6 @@ router.post(
   "/",
   upload.single("file"), (req, res) => {
     try {
-      console.log('api hitted');
       return res.status(200).json('File Uploaded Successfully!');
     } catch (error) {
       console.log(error);
