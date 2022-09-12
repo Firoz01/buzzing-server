@@ -1,5 +1,6 @@
 import UserModel from '../Models/userModel.js';
 import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
+import jwt from 'jsonwebtoken';
 
 export const getAlluser = async (req, res) => {
   try {
@@ -32,7 +33,7 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   const id = req.params.id;
   const { _id } = req.body;
-
+  
   if (id === _id) {
     try {
       let profileImageUpdated;
@@ -79,10 +80,16 @@ export const updateUser = async (req, res) => {
       };
 
       const user = await UserModel.findById(id);
-      const userUpdateToDb = await user.updateOne({ $set: updatedata });
+      await user.updateOne({ $set: updatedata });
+      const token = jwt.sign(
+        { username: user.username, id: user._id },
+        process.env.JWT_KEY,
+        { expiresIn: '1h' }
+      );
+
       res.status(200).json({
-        message: 'user update successfully',
-        databaseUpdateResult: userUpdateToDb
+        user,
+        token
       });
     } catch (error) {
       res.status(500).json({ message: error.message });
