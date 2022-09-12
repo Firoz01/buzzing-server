@@ -33,7 +33,7 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   const id = req.params.id;
   const { _id } = req.body;
-  
+
   if (id === _id) {
     try {
       let profileImageUpdated;
@@ -66,11 +66,11 @@ export const updateUser = async (req, res) => {
         }
       }
 
-      const updatedata = {
-        _id: _id,
+      const updateData = {
         firstName: req.body?.firstName,
         lastName: req.body?.lastName,
         worksAt: req.body?.worksAt,
+        country: req.body?.country,
         livesIn: req.body?.livesIn,
         relationship: req.body?.relationship,
         cloudinaryImgIdProfile: profileImageUpdated?.public_id,
@@ -79,8 +79,12 @@ export const updateUser = async (req, res) => {
         coverPicture: coverImageUpdated?.secure_url
       };
 
-      const user = await UserModel.findById(id);
-      await user.updateOne({ $set: updatedata });
+      const user = await UserModel.findOneAndUpdate(id, updateData, {
+        new: true,
+        upsert: true,
+        useFindAndModify: false
+      });
+
       const token = jwt.sign(
         { username: user.username, id: user._id },
         process.env.JWT_KEY,
