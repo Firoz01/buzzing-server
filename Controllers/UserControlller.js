@@ -4,12 +4,12 @@ import jwt from 'jsonwebtoken';
 
 export const getAlluser = async (req, res) => {
   try {
-    const doc = await UserModel.find();
-    if (doc) {
-      res.status(200).json(doc);
-    } else {
-      res.status(404).json('empty');
-    }
+    let users = await UserModel.find();
+    users = users.map((user) => {
+      const { password, ...otherDetails } = user._doc;
+      return otherDetails;
+    });
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -79,11 +79,15 @@ export const updateUser = async (req, res) => {
         coverPicture: coverImageUpdated?.secure_url
       };
 
-      const user = await UserModel.findOneAndUpdate(id, updateData, {
-        new: true,
-        upsert: true,
-        useFindAndModify: false
-      });
+      const user = await UserModel.findOneAndUpdate(
+        id,
+        { $set: updateData },
+        {
+          new: true,
+          upsert: true,
+          useFindAndModify: false
+        }
+      );
 
       const token = jwt.sign(
         { username: user.username, id: user._id },
@@ -120,15 +124,15 @@ export const deleteUser = async (req, res) => {
 
 export const following = async (req, res) => {
   const iWantToFollowUserId = req.params.id;
-  const { currentUserId } = req.body;
-  if (currentUserId === iWantToFollowUserId) {
+  const { _id } = req.body;
+  if (_id === iWantToFollowUserId) {
     res.status(403).json('Action forbidden! You cant followed by you');
   } else {
     try {
       const followUser = await UserModel.findById(iWantToFollowUserId);
-      const followingByMe = await UserModel.findById(currentUserId);
-      if (!followUser.followers.includes(currentUserId)) {
-        await followUser.updateOne({ $push: { followers: currentUserId } });
+      const followingByMe = await UserModel.findById(_id);
+      if (!followUser.followers.includes(_id)) {
+        await followUser.updateOne({ $push: { followers: _id } });
         await followingByMe.updateOne({
           $push: { following: iWantToFollowUserId }
         });
@@ -143,17 +147,17 @@ export const following = async (req, res) => {
 };
 export const unFollowing = async (req, res) => {
   const id = req.params.id;
-  const { currentUserId } = req.body;
-  if (currentUserId === id) {
+  const { _id } = req.body;
+  if (_id === id) {
     res
       .status(403)
       .json('Action forbidden! you cant able to unfollowing yourself');
   } else {
     try {
       const followUser = await UserModel.findById(id);
-      const followingUser = await UserModel.findById(currentUserId);
-      if (followUser.followers.includes(currentUserId)) {
-        await followUser.updateOne({ $pull: { followers: currentUserId } });
+      const followingUser = await UserModel.findById(_id);
+      if (followUser.followers.includes(_id)) {
+        await followUser.updateOne({ $pull: { followers: _id } });
         await followingUser.updateOne({ $pull: { following: id } });
         res
           .status(200)
