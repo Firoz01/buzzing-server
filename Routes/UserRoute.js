@@ -7,19 +7,16 @@ import {
   unFollowing,
   updateUser
 } from '../Controllers/UserControlller.js';
+import authMiddleWare from '../MiddleWare/authMiddleWare.js';
 
 import upload from '../utils/multer.js';
 
 const router = express.Router();
 router.get('/', getAlluser);
 router.get('/:id', getUser);
-router.put(
-  '/:id',
-  upload.any(),
-  updateUser
-);
-router.delete('/:id', deleteUser);
-router.put('/:id/follow', following);
-router.put('/:id/unfollow', unFollowing);
+router.put('/:id', authMiddleWare, upload.any(), updateUser);
+router.delete('/:id', authMiddleWare, deleteUser);
+router.put('/:id/follow', authMiddleWare, following);
+router.put('/:id/unfollow', authMiddleWare, unFollowing);
 
 export default router;
