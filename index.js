@@ -8,6 +8,7 @@ import AuthRoute from './Routes/AuthRoute.js';
 import UserRoute from './Routes/UserRoute.js';
 import PostRoute from './Routes/PostRoute.js';
 import UploadRoute from './Routes/UploadRoute.js';
+import ChatRoute from './Routes/ChatRoute.js';
 
 //Routes
 //Middleware
@@ -43,3 +44,4 @@ app.use('/api/v1/auth', AuthRoute);
 app.use('/api/v1/user', UserRoute);
 app.use('/api/v1/posts', PostRoute);
 app.use('/api/v1/upload', UploadRoute);
+app.use('/api/v1/chat', ChatRoute);
