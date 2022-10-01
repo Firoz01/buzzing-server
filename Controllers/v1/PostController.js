@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
-import PostModel from '../Models/postModel.js';
-import UserModel from '../Models/userModel.js';
-import catchAsync from '../utils/catchAsync.js';
-import cloudinary from '../utils/cloudinary.js';
-import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
+//import PostModel from '../../Models/postModel.js';
+import PostModel from '../../Models/postModel.js'
+import UserModel from '../../Models/userModel.js';
+import catchAsync from '../../utils/catchAsync.js';
+import cloudinary from '../../utils/cloudinary.js';
+import uploadSingleImageToCloudinary from '../../utils/uploadImage.js';
 
 export const createPost = catchAsync(async (req, res) => {
   //console.log(req?.file);

@@ -6,10 +6,10 @@ import {
   getUser,
   unFollowing,
   updateUser
-} from '../Controllers/UserControlller.js';
-import authMiddleWare from '../MiddleWare/authMiddleWare.js';
+} from '../../Controllers/v1/UserControlller.js';
+import authMiddleWare from '../../MiddleWare/authMiddleWare.js';
 
-import upload from '../utils/multer.js';
+import upload from '../../utils/multer.js';
 
 const router = express.Router();
 router.get('/', getAlluser);

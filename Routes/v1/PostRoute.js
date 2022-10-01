@@ -6,8 +6,8 @@ import {
   getTimelinePosts,
   likeUnlikePost,
   updatePost
-} from '../Controllers/PostController.js';
-import upload from '../utils/multer.js';
+} from '../../Controllers/v1/PostController.js';
+import upload from '../../utils/multer.js';
 const router = express.Router();
 
 router.post('/', upload.single('image'), createPost);

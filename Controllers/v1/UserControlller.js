@@ -1,5 +1,5 @@
-import UserModel from '../Models/userModel.js';
-import uploadSingleImageToCloudinary from '../utils/uploadImage.js';
+import UserModel from '../../Models/userModel.js';
+import uploadSingleImageToCloudinary from '../../utils/uploadImage.js';
 import jwt from 'jsonwebtoken';
 
 export const getAlluser = async (req, res) => {

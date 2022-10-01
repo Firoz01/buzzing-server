@@ -1,5 +1,5 @@
-import ChatModel from '../Models/chatModel.js';
-import catchAsync from '../utils/catchAsync.js';
+import ChatModel from '../../Models/chatModel.js';
+import catchAsync from '../../utils/catchAsync.js';
 
 export const createChat = catchAsync(async (req, res) => {
   const newChat = new ChatModel({

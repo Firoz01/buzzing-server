@@ -3,11 +3,12 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
 
-import AuthRoute from './Routes/AuthRoute.js';
-import UserRoute from './Routes/UserRoute.js';
-import PostRoute from './Routes/PostRoute.js';
-import UploadRoute from './Routes/UploadRoute.js';
-import ChatRoute from './Routes/ChatRoute.js';
+import AuthRoute from "./Routes/v1/AuthRoute.js"
+import UserRoute from './Routes/v1/UserRoute.js';
+import PostRoute from './Routes/v1/PostRoute.js';
+import UploadRoute from './Routes/v1/UploadRoute.js';
+import ChatRoute from './Routes/v1/ChatRoute.js';
+import AppError from './utils/appError.js';
 
 //Routes
 //Middleware
@@ -27,5 +28,9 @@ app.use('/api/v1/user', UserRoute);
 app.use('/api/v1/posts', PostRoute);
 app.use('/api/v1/upload', UploadRoute);
 app.use('/api/v1/chat', ChatRoute);
+
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+});
 
 export default app;
