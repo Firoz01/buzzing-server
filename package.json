@@ -5,7 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": " nodemon server.js"
+    "start": "node server.js",
+    "start-dev": " nodemon server.js",
+    "debug": "ndb server.js"
   },
   "author": "Md Firoz Mia",
   "license": "ISC",

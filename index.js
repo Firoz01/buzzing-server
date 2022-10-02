@@ -29,8 +29,8 @@ app.use('/api/v1/posts', PostRoute);
 app.use('/api/v1/upload', UploadRoute);
 app.use('/api/v1/chat', ChatRoute);
 
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
-});
+// app.all('*', (req, res, next) => {
+//   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+// });
 
 export default app;
