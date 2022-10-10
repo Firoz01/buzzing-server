@@ -1,6 +1,5 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
 import cors from 'cors';
 
 import AuthRoute from './Routes/v1/AuthRoute.js';
@@ -9,12 +8,11 @@ import PostRoute from './Routes/v1/PostRoute.js';
 import UploadRoute from './Routes/v1/UploadRoute.js';
 import ChatRoute from './Routes/v1/ChatRoute.js';
 import MessageRoute from './Routes/v1/MessageRoute.js';
-import AppError from './utils/appError.js';
+//import AppError from './utils/appError.js';
 
 //Routes
 //Middleware
 
-dotenv.config();
 
 const app = express();
 
