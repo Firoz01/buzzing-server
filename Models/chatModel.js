@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 const ChatSchema = mongoose.Schema(
   {
     members: {
-      type: Array
+      type: Array,
+      required: true
     }
   },
   {

@@ -2,12 +2,14 @@ import ChatModel from '../../Models/chatModel.js';
 import catchAsync from '../../utils/catchAsync.js';
 
 export const createChat = catchAsync(async (req, res) => {
+  const senderId = req.body.senderId;
+  const receiverId = req.body.receiverId;
   const newChat = new ChatModel({
-    members: [req.body.senderId, req.body.receiverId]
+    members: [senderId,receiverId]
   });
 
-  const result = await newChat.save();
-  res.status(200).json(result);
+  await newChat.save();
+  res.status(200).json('chat has been created successfully');
 });
 
 export const userChats = async (req, res) => {
@@ -23,11 +25,10 @@ export const userChats = async (req, res) => {
 
 export const findChat = async (req, res) => {
   try {
-    const chat = await ChatModel.findOne({
+    const result = await ChatModel.findOne({
       members: { $all: [req.params.firstId, req.params.secondId] }
     });
-
-    res.status(200).json(chat);
+    res.status(200).json(result);
   } catch (error) {
     res.status(500).json(error);
   }

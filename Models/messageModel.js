@@ -2,10 +2,12 @@ import mongoose from 'mongoose';
 const MessageSchema = mongoose.Schema(
   {
     chatId: {
-      type: String
+      type: String,
+      requried: true
     },
     senderId: {
-      type: String
+      type: String,
+      requried: true
     },
 
     text: {
