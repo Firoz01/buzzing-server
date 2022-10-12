@@ -7,17 +7,18 @@ import cloudinary from '../../utils/cloudinary.js';
 import uploadSingleImageToCloudinary from '../../utils/uploadImage.js';
 
 export const createPost = catchAsync(async (req, res) => {
- 
   if (req?.file?.path) {
     const result = await uploadSingleImageToCloudinary(req.file.path, {
       folder: 'postImage'
     });
 
+    console.log(result);
+
     const post = {
-      userId: req.body.userId,
-      desc: req.body.desc,
-      image: result.secure_url,
-      cloudinaryImgId: result.public_id
+      userId: req.body?.userId,
+      desc: req.body?.desc,
+      image: result?.url,
+      cloudinaryImgId: result?.public_id
     };
 
     console.log(post);
