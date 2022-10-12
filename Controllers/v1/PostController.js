@@ -1,16 +1,13 @@
 import mongoose from 'mongoose';
 //import PostModel from '../../Models/postModel.js';
-import PostModel from '../../Models/postModel.js'
+import PostModel from '../../Models/postModel.js';
 import UserModel from '../../Models/userModel.js';
 import catchAsync from '../../utils/catchAsync.js';
 import cloudinary from '../../utils/cloudinary.js';
 import uploadSingleImageToCloudinary from '../../utils/uploadImage.js';
 
 export const createPost = catchAsync(async (req, res) => {
-  //console.log(req?.file);
-  //console.log(req.body);
-  //res.status(200).json('okay');
-
+ 
   if (req?.file?.path) {
     const result = await uploadSingleImageToCloudinary(req.file.path, {
       folder: 'postImage'
@@ -22,6 +19,8 @@ export const createPost = catchAsync(async (req, res) => {
       image: result.secure_url,
       cloudinaryImgId: result.public_id
     };
+
+    console.log(post);
 
     const newPost = new PostModel(post);
     await newPost.save();
