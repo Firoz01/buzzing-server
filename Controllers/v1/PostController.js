@@ -12,16 +12,12 @@ export const createPost = catchAsync(async (req, res) => {
       folder: 'postImage'
     });
 
-    console.log(result);
-
     const post = {
       userId: req.body?.userId,
       desc: req.body?.desc,
       image: result?.url,
       cloudinaryImgId: result?.public_id
     };
-
-    console.log(post);
 
     const newPost = new PostModel(post);
     await newPost.save();
