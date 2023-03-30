@@ -5,10 +5,11 @@ export const createChat = catchAsync(async (req, res) => {
   const senderId = req.body.senderId;
   const receiverId = req.body.receiverId;
   const newChat = new ChatModel({
-    members: [senderId,receiverId]
+    members: [senderId, receiverId]
   });
-
-  await newChat.save();
+  console.log(newChat._id);
+  const chat = await newChat.save();
+  console.log('chat id', chat);
   res.status(200).json('chat has been created successfully');
 });
 
